@@ -1,7 +1,7 @@
 <% if ScmConfig['force_repository'] %>
   <script type="text/javascript">
     //<![CDATA[
-    Event.observe(window, 'load', function() {
+    $(document).ready(function() {
       var r = $('project_enabled_module_names_repository');
       if (r) {
         r.checked = true;
@@ -33,11 +33,15 @@
     </p>
     <script type="text/javascript">
       //<![CDATA[
-      Event.observe(window, 'load', function() {
+      $(document).ready(function() {
         var f = function() {
-          setVisible('project_scm', ($('project_enabled_module_names_repository').checked == true));
-        };
-        Event.observe('project_enabled_module_names_repository', 'change', f);
+          if ($('#project_enabled_module_names_repository:checked').val() != undefined) {
+            $('#project_scm').show();
+          } else {
+            $('#project_scm').hide();
+          }
+        }
+        $(document).on('change', '#project_enabled_module_names_repository', f);
         f();
       });
       //]]>
