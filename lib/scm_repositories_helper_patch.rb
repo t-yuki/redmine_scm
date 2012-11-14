@@ -37,9 +37,9 @@ module ScmRepositoriesHelperPatch
             end
 
             if request.xhr?
-                reptags << javascript_tag("$('repository_save')." + (button_disabled ? 'disable' : 'enable') + "();")
+                reptags << javascript_tag("$('#repository_save')." + (button_disabled ? "attr('disabled','disabled')" : "removeAttr('enable')") + ";")
             else
-                reptags << javascript_tag("Event.observe(window, 'load', function() { $('repository_save')." + (button_disabled ? 'disable' : 'enable') + "(); });")
+                reptags << javascript_tag("$(document).ready(function() { $('#repository_save')." + (button_disabled ? "attr('disabled','disabled')" : "removeAttr('enable')") + "; });")
             end
 
             return reptags
@@ -54,7 +54,7 @@ module ScmRepositoriesHelperPatch
             end
 
             if repository.new_record? && SubversionCreator.enabled?
-                add = submit_tag(l(:button_create_new_repository), :onclick => "$('repository_operation').value = 'add';")
+                add = submit_tag(l(:button_create_new_repository), :onclick => "$('#repository_operation').val('add');")
                 svntags['<br />'] = ' ' + add + '<br />'
                 svntags << hidden_field_tag(:operation, '', :id => 'repository_operation')
                 unless request.post?
@@ -62,7 +62,7 @@ module ScmRepositoriesHelperPatch
                     if SubversionCreator.repository_exists?(@project.identifier) && @project.respond_to?(:repositories)
                         path << '.' + @project.repositories.select{ |r| r.created_with_scm }.size.to_s
                     end
-                    svntags << javascript_tag("$('repository_url').value = '#{escape_javascript(path)}';")
+                    svntags << javascript_tag("$('#repository_url').val('#{escape_javascript(path)}');")
                 end
 
             elsif !repository.new_record? && repository.created_with_scm &&
@@ -85,7 +85,7 @@ module ScmRepositoriesHelperPatch
             end
 
             if repository.new_record? && MercurialCreator.enabled?
-                add = submit_tag(l(:button_create_new_repository), :onclick => "$('repository_operation').value = 'add';")
+                add = submit_tag(l(:button_create_new_repository), :onclick => "$('#repository_operation').val('add');")
                 if hgtags.include?('<br />')
                     hgtags['<br />'] = ' ' + add + '<br />'
                 else
@@ -97,7 +97,7 @@ module ScmRepositoriesHelperPatch
                     if MercurialCreator.repository_exists?(@project.identifier) && @project.respond_to?(:repositories)
                         path << '.' + @project.repositories.select{ |r| r.created_with_scm }.size.to_s
                     end
-                    hgtags << javascript_tag("$('repository_url').value = '#{escape_javascript(path)}';")
+                    hgtags << javascript_tag("$('#repository_url').val('#{escape_javascript(path)}');")
                 end
 
             elsif !repository.new_record? && repository.created_with_scm &&
@@ -126,7 +126,7 @@ module ScmRepositoriesHelperPatch
             end
 
             if repository.new_record? && BazaarCreator.enabled?
-                add = submit_tag(l(:button_create_new_repository), :onclick => "$('repository_operation').value = 'add';")
+                add = submit_tag(l(:button_create_new_repository), :onclick => "$('#repository_operation').val('add');")
                 bzrtags['</p>'] = ' ' + add + '</p>'
                 bzrtags << hidden_field_tag(:operation, '', :id => 'repository_operation')
                 unless request.post?
@@ -134,9 +134,9 @@ module ScmRepositoriesHelperPatch
                     if BazaarCreator.repository_exists?(@project.identifier) && @project.respond_to?(:repositories)
                         path << '.' + @project.repositories.select{ |r| r.created_with_scm }.size.to_s
                     end
-                    bzrtags << javascript_tag("$('repository_url').value = '#{escape_javascript(path)}';")
+                    bzrtags << javascript_tag("$('#repository_url').val('#{escape_javascript(path)}');")
                     if BazaarCreator.options['log_encoding']
-                        bzrtags << javascript_tag("$('repository_log_encoding').value = '#{escape_javascript(BazaarCreator.options['log_encoding'])}';")
+                        bzrtags << javascript_tag("$('#repository_log_encoding').val('#{escape_javascript(BazaarCreator.options['log_encoding'])}');")
                     end
                 end
 
@@ -160,7 +160,7 @@ module ScmRepositoriesHelperPatch
             end
 
             if repository.new_record? && GitCreator.enabled?
-                add = submit_tag(l(:button_create_new_repository), :onclick => "$('repository_operation').value = 'add';")
+                add = submit_tag(l(:button_create_new_repository), :onclick => "$('#repository_operation').val('add');")
                 if gittags.include?('<br />')
                     gittags['<br />'] = ' ' + add + '<br />'
                 else
@@ -172,7 +172,7 @@ module ScmRepositoriesHelperPatch
                     if GitCreator.repository_exists?(@project.identifier) && @project.respond_to?(:repositories)
                         path << '.' + @project.repositories.select{ |r| r.created_with_scm }.size.to_s
                     end
-                    gittags << javascript_tag("$('repository_url').value = '#{escape_javascript(path)}';")
+                    gittags << javascript_tag("$('#repository_url').val('#{escape_javascript(path)}');")
                 end
 
             elsif !repository.new_record? && repository.created_with_scm &&
